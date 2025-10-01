@@ -29,7 +29,8 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
-        spring.json.value.default.type: com.example.order_service.OrderCreatedEvent
+        spring.json.value.default.type: com.example.inventory_service.OrderCreatedEvent
+        spring.jackson.deserialization.read-enum-values-as-text: true
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
