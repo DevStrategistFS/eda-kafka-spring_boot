@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: inventory-service
+
+  # --- H2 Database Configuration ---
+  datasource:
+    url: jdbc:h2:mem:inventoryDb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # --- Kafka Configuration ---
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    consumer:
+      group-id: inventory-group-id
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: com.example.order_service.OrderCreatedEvent
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      # Enable transactional producer for exactly-once processing (DB + Kafka)
+      transaction-id-prefix: inventory-tx-
+
+  listener:
+    ack-mode: MANUAL_IMMEDIATE
+
+kafka:
+  topic:
+    # Topic we consume from
+    orders-created: orders-created-topic
+
+inventory:
+  topic:
+    # Topic we produce to
+    updates: inventory-updates-topic
+
+server:
+  port: 8081
