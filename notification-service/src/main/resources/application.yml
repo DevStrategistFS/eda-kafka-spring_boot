@@ -2,12 +2,12 @@ spring:
   application:
     name: notification-service
 
-server:
-  port: 8083
-
   # Kafka Configuration
   kafka:
     bootstrap-servers: localhost:9092
+    topic:
+      # Topic we consume from
+      inventory-updates: inventory-updates-topic
     consumer:
       group-id: notification-service-group-id
       enable-auto-commit: false
@@ -16,11 +16,8 @@ server:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.value.default.type: com.example.notification_service.InventoryUpdateEvent
-      listener:
-        ack-mode: MANUAL_IMMEDIATE
-      topic:
-        # Topic we consume from
-        inventory-updates: inventory-updates-topic
+  listener:
+    ack-mode: MANUAL_IMMEDIATE
 
   # H2 (In-memory Database for Idempotency) Configuration
   datasource:
@@ -38,3 +35,6 @@ server:
     console:
       enabled: true
       path: /h2-console
+
+server:
+  port: 8083

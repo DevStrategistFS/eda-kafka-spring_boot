@@ -16,7 +16,7 @@ public class InventoryUpdateConsumer {
     }
 
     @KafkaListener(
-            topics = "${spring.kafka.consumer.topic.inventory-updates}",
+            topics = "${spring.kafka.topic.inventory-updates}",
             groupId = "${spring.kafka.consumer.group-id}"
     )
     public void listen(InventoryUpdateEvent event, Acknowledgment ack) {
